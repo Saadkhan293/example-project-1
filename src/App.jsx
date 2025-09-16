@@ -1,27 +1,34 @@
 import React, { useRef } from "react";
 
 function App() {
-  const iframeRef = useRef(null);
+  const childWindowRef = useRef(null);
+
+  const openChildWindow = () => {
+    // Open child app in a new tab/window
+    childWindowRef.current = window.open(
+      "https://example-project-2.vercel.app/",
+      "_blank",
+      "width=600,height=400"
+    );
+  };
 
   const sendToken = () => {
-    const token = "sample_jwt_token_12345"; // pretend from auth service
-    iframeRef.current.contentWindow.postMessage(
-      { token },
-      "https://example-project-2-nu1cinp4a-saadkhan293s-projects.vercel.app" // child app origin
-    );
+    const token = "sample_jwt_token_12345";
+    if (childWindowRef.current) {
+      childWindowRef.current.postMessage(
+        { token },
+        "https://example-project-2.vercel.app/" // must match child app origin
+      );
+    } else {
+      alert("Child window not opened yet!");
+    }
   };
 
   return (
     <div>
       <h1>Parent React App</h1>
-      <button onClick={sendToken}>Send Token to Iframe</button>
-
-      <iframe
-        ref={iframeRef}
-        title="ChildApp"
-        src="https://example-project-2-nu1cinp4a-saadkhan293s-projects.vercel.app"
-        style={{ width: "600px", height: "400px", border: "1px solid black" }}
-      />
+      <button onClick={openChildWindow}>Open Child Window</button>
+      <button onClick={sendToken}>Send Token to Child</button>
     </div>
   );
 }
