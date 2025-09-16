@@ -13,7 +13,11 @@ function App() {
   };
 
   const sendToken = () => {
-    const token = "sample_jwt_token_12345";
+    const token = {
+      token: "asdasdasdasdasdas123124512easdada",
+      name: "Saad",
+      message: "it works",
+    };
     if (childWindowRef.current) {
       childWindowRef.current.postMessage(
         { token },
